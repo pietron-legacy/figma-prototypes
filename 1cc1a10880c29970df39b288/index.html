@@ -13,16 +13,17 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 Inter, system-ui, sans-serif; }
   #app { height: 100%; display: flex; flex-direction: column; }
-  button, select { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
-  button:hover { border-color: var(--text-2); }
-  button:disabled { opacity: .45; cursor: default; }
-  button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  /* Player chrome only: prototypes bring their own styles, and these must not reach into them. */
+  .lsp-bar button, .lsp-bar select { font: inherit; color: var(--text); background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+  .lsp-bar button:hover { border-color: var(--text-2); }
+  .lsp-bar button:disabled { opacity: .45; cursor: default; }
+  .lsp-bar button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .lsp-bar :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-  header { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  header .title { flex: 1; min-width: 160px; }
-  header .title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  header .title span { color: var(--text-2); font-size: 11px; }
+  .lsp-bar { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .lsp-bar .title { flex: 1; min-width: 160px; }
+  .lsp-bar .title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lsp-bar .title span { color: var(--text-2); font-size: 11px; }
   .status { padding: 24px 16px; color: var(--text-2); }
   .status.error { color: var(--danger); }
   .notice { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 6px 12px; border-radius: 6px; max-width: 90%; }
@@ -776,7 +777,7 @@
     if (error) return /* @__PURE__ */ a3("p", { class: "status error", children: error });
     if (!loaded) return /* @__PURE__ */ a3("p", { class: "status", children: "Loading the prototype\u2026" });
     return /* @__PURE__ */ a3(M, { children: [
-      /* @__PURE__ */ a3("header", { children: [
+      /* @__PURE__ */ a3("header", { class: "lsp-bar", children: [
         /* @__PURE__ */ a3("div", { class: "title", children: [
           /* @__PURE__ */ a3("strong", { children: loaded.info.label }),
           /* @__PURE__ */ a3("span", { children: "Interactive prototype" })
