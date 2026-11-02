@@ -1,0 +1,74 @@
+[
+  {
+    "id": "multi-attraction",
+    "label": "Multi-attraction selection",
+    "sectionIds": [
+      "3:1198"
+    ],
+    "namePattern": "bundle creation",
+    "previewNodeId": "3:1346",
+    "canvas": {
+      "mobile": {
+        "empty": "3:1346",
+        "populated": "3:1565",
+        "max": "3:1682"
+      },
+      "desktop": {
+        "empty": "11:2586",
+        "populated": "11:2685",
+        "max": "11:2793"
+      }
+    },
+    "version": "1793638367448"
+  },
+  {
+    "id": "new-flow",
+    "label": "Add-ons as a secondary step",
+    "sectionIds": [
+      "83:19290"
+    ],
+    "namePattern": "^new flow$",
+    "previewNodeId": "82:17372",
+    "canvas": {
+      "mobile": {
+        "first": "82:17372",
+        "champagne": "82:17501",
+        "champagne-added": "82:17630",
+        "photo": "82:17774",
+        "upgrade": "16:11132"
+      },
+      "desktop": {
+        "first": "82:17918",
+        "champagne": "82:18067",
+        "champagne-added": "82:18216",
+        "binoculars-added": "82:18758",
+        "photo": "82:18928",
+        "upgrade": "16:9931"
+      }
+    },
+    "version": "1793638367448"
+  },
+  {
+    "id": "selection",
+    "label": "Multi-attraction selection (POS)",
+    "sectionIds": [
+      "5:3641"
+    ],
+    "namePattern": "^selection$",
+    "previewNodeId": "3:23579",
+    "canvas": {
+      "mobile": {
+        "empty": "3:23579",
+        "populated": "3:22990",
+        "max": "3:24125"
+      },
+      "desktop": {
+        "empty": "263:9472",
+        "populated": "3:16635",
+        "six": "3:25262",
+        "max": "3:26048"
+      }
+    },
+    "version": "1793638367448"
+  }
+]
