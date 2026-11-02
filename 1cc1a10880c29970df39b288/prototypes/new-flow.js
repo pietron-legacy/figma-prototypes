@@ -737,7 +737,7 @@
       return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
         NewFlow,
         {
-          device,
+          device: device === "mobile" ? "mobile" : "desktop",
           state,
           reducedMotion,
           actions: {
@@ -752,7 +752,7 @@
       );
     },
     closest: (state, device) => {
-      const c = closestDesignedState(state, device);
+      const c = closestDesignedState(state, device === "mobile" ? "mobile" : "desktop");
       return { key: c.state, label: LABELS[c.state], exact: c.exact };
     }
   });

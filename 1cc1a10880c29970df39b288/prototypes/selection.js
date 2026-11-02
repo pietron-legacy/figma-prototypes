@@ -209,7 +209,7 @@
     const cartOk = (want) => device === "mobile" ? sameQty(s.qty, {}) : sameQty(s.qty, want) && slotOk;
     if (s.selected.length === 0) return { state: "empty", exact: device === "mobile" ? sameQty(s.qty, {}) : sameQty(s.qty, {}) && slotOk };
     if (hasDng(s)) return { state: "max", exact: sameSet(s.selected, all) && cartOk({ adult: 1, child: 1 }) };
-    if (device === "desktop" && s.selected.length >= 3)
+    if (device !== "mobile" && s.selected.length >= 3)
       return { state: "six", exact: sameSet(s.selected, six) && cartOk({ adult: 1, child: 1, under2: 1 }) };
     return { state: "populated", exact: sameSet(s.selected, ["mts"]) && cartOk({ adult: 1, child: 1, under2: 1 }) };
   }
@@ -486,12 +486,17 @@
 
   // src/prototypes/selection/view.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  var FRAME = { mobile: { width: 375, height: 877 }, desktop: { width: 1397, height: 937 } };
+  var FRAME = {
+    mobile: { width: 375, height: 877, label: "Mobile" },
+    desktop: { width: 1397, height: 937, label: "Desktop" },
+    // A second screen facing the customer: it only mirrors the order, so Auto never picks it.
+    "dual-screen": { width: 853, height: 533, label: "Dual screen", auto: false }
+  };
   function SelectionView(props) {
     const summary = summarize(props.state);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { class: `sel sel-${props.device}${props.reducedMotion ? " sel-rm" : ""}`, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: CSS }),
-      props.device === "mobile" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mobile, { ...props, s: summary }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Desktop, { ...props, s: summary })
+      props.device === "mobile" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mobile, { ...props, s: summary }) : props.device === "dual-screen" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CustomerDisplay, { s: summary, reducedMotion: props.reducedMotion }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Desktop, { ...props, s: summary })
     ] });
   }
   function Mobile({ state, actions, s }) {
@@ -973,7 +978,7 @@
       return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
         SelectionView,
         {
-          device,
+          device: device in FRAME ? device : "desktop",
           state,
           reducedMotion,
           actions: {
@@ -999,12 +1004,29 @@
   var meta_default = {
     id: "selection",
     label: "Multi-attraction selection (POS)",
-    sectionIds: ["5:3641"],
+    sectionIds: [
+      "5:3641"
+    ],
     namePattern: "^selection$",
     previewNodeId: "3:23579",
     canvas: {
-      mobile: { empty: "3:23579", populated: "3:22990", max: "3:24125" },
-      desktop: { empty: "263:9472", populated: "3:16635", six: "3:25262", max: "3:26048" }
+      mobile: {
+        empty: "3:23579",
+        populated: "3:22990",
+        max: "3:24125"
+      },
+      desktop: {
+        empty: "263:9472",
+        populated: "3:16635",
+        six: "3:25262",
+        max: "3:26048"
+      },
+      "dual-screen": {
+        empty: "73:55448",
+        populated: "73:55490",
+        six: "73:55562",
+        max: "73:55662"
+      }
     }
   };
 

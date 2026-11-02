@@ -531,7 +531,7 @@
     View: ({ device, state, commit, reducedMotion, notify }) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       MultiAttraction,
       {
-        device,
+        device: device === "mobile" ? "mobile" : "desktop",
         selection: state,
         reducedMotion,
         onToggle: (id) => commit(toggle(state, id)),

@@ -587,6 +587,11 @@
     return "function" == typeof t3 ? t3(n3) : t3;
   }
 
+  // src/prototypes/types.ts
+  function deviceLabel(frames, id2) {
+    return frames[id2]?.label ?? id2.replace(/-/g, " ").replace(/^./, (c4) => c4.toUpperCase());
+  }
+
   // node_modules/.pnpm/preact@11.1.1/node_modules/preact/jsx-runtime/dist/jsxRuntime.mjs
   var jsxRuntime_exports = {};
   __export(jsxRuntime_exports, {
@@ -668,7 +673,6 @@
   // src/ui/coded.tsx
   var PADDING = 16;
   var MIN_READABLE_SCALE = 0.5;
-  var ORDER = ["desktop", "mobile"];
   function CodedHost(props) {
     const { prototype: proto } = props;
     const stage = T2(null);
@@ -681,12 +685,13 @@
       ro.observe(el);
       return () => ro.disconnect();
     }, []);
-    const devices = ORDER.filter((d3) => proto.frames[d3]);
+    const devices = Object.keys(proto.frames);
+    const byWidth = devices.filter((d3) => proto.frames[d3].auto !== false).sort((a4, b3) => proto.frames[b3].width - proto.frames[a4].width);
     const fit = (d3) => {
       const f4 = proto.frames[d3];
       return Math.min((size.width - PADDING * 2) / f4.width, (size.height - PADDING * 2) / f4.height, 2);
     };
-    const device = props.deviceSetting !== "auto" && proto.frames[props.deviceSetting] ? props.deviceSetting : devices.find((d3) => fit(d3) >= MIN_READABLE_SCALE) ?? devices[devices.length - 1];
+    const device = props.deviceSetting !== "auto" && proto.frames[props.deviceSetting] ? props.deviceSetting : byWidth.find((d3) => fit(d3) >= MIN_READABLE_SCALE) ?? byWidth[byWidth.length - 1] ?? devices[0];
     const frame = proto.frames[device];
     const scale = Math.max(0.1, fit(device));
     props.handleRef.current = {
@@ -697,7 +702,8 @@
       const c4 = proto.closest(state, device);
       props.onState({
         device,
-        devices,
+        deviceLabel: deviceLabel(proto.frames, device),
+        devices: devices.map((id2) => ({ id: id2, label: deviceLabel(proto.frames, id2) })),
         canGoBack: history.length > 1,
         canvasNodeId: props.info.canvas[device]?.[c4.key] ?? null,
         closest: { label: c4.label, exact: c4.exact }
@@ -786,7 +792,7 @@
         /* @__PURE__ */ a3("button", { onClick: () => handle.current?.reset(), title: "Start over (R)", "aria-label": "Start over (R)", children: "\u21BA" }),
         (state?.devices.length ?? 0) > 1 && /* @__PURE__ */ a3("select", { "aria-label": "Device", value: deviceSetting, onChange: (e4) => setDeviceSetting(e4.target.value), children: [
           /* @__PURE__ */ a3("option", { value: "auto", children: "Auto" }),
-          state.devices.map((d3) => /* @__PURE__ */ a3("option", { value: d3, children: d3 === "mobile" ? "Mobile" : "Desktop" }, d3))
+          state.devices.map((d3) => /* @__PURE__ */ a3("option", { value: d3.id, children: d3.label }, d3.id))
         ] }),
         /* @__PURE__ */ a3("button", { onClick: () => setReducedMotion((v3) => !v3), "aria-pressed": reducedMotion, title: "Play transitions instantly", children: "Less motion" })
       ] }),
