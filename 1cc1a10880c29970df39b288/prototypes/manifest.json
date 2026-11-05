@@ -19,7 +19,7 @@
         "max": "11:2793"
       }
     },
-    "version": "1793640747079"
+    "version": "1793872099697"
   },
   {
     "id": "new-flow",
@@ -38,15 +38,15 @@
         "upgrade": "16:11132"
       },
       "desktop": {
-        "first": "82:17918",
-        "champagne": "82:18067",
-        "champagne-added": "82:18216",
-        "binoculars-added": "82:18758",
-        "photo": "82:18928",
+        "first": "123:12192",
+        "champagne": "117:3427",
+        "champagne-added": "123:12312",
+        "browsing": "117:3780",
+        "photo": "117:3962",
         "upgrade": "16:9931"
       }
     },
-    "version": "1793640747079"
+    "version": "1793872099698"
   },
   {
     "id": "selection",
@@ -75,6 +75,6 @@
         "max": "73:55662"
       }
     },
-    "version": "1793640747079"
+    "version": "1793872099698"
   }
 ]

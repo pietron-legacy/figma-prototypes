@@ -125,7 +125,8 @@
       saved: count ? `Saved ${money(saved)}` : null,
       count,
       hasAddons: count > 0,
-      mobileCta: count ? "continue" : "continue without"
+      mobileCta: count ? "continue" : "continue without",
+      addButton: count ? "secondary" : "primary"
     };
   }
   function checkoutMessage(s, upgrade) {
@@ -137,7 +138,7 @@
     first: "First add-on",
     champagne: "Opening another add-on",
     "champagne-added": "Add-on added",
-    "binoculars-added": "Add from the list",
+    browsing: "Browsing after adding",
     photo: "Selection kept while browsing",
     upgrade: "Upgrade offer"
   };
@@ -152,7 +153,7 @@
       { key: "first", focus: "binoculars", qty: {} },
       { key: "champagne", focus: "champagne", qty: {} },
       { key: "champagne-added", focus: "champagne", qty: { champagne: 1 } },
-      { key: "binoculars-added", focus: "binoculars", qty: { binoculars: 1, champagne: 1 } },
+      { key: "browsing", focus: "binoculars", qty: { champagne: 1 } },
       { key: "photo", focus: "photo", qty: { binoculars: 1, champagne: 1 } }
     ]
   };
@@ -431,16 +432,30 @@
 .nf-dbody { flex: 1; min-height: 0; display: flex; }
 .nf-dlist { width: 408px; flex: none; padding: 24px; overflow-y: auto; border-right: 1px solid var(--border); }
 .nf-dlist .nf-list { gap: 16px; }
-.nf-desktop .nf-compact { padding: 10px 14px 10px 10px; height: 96px; }
-.nf-desktop .nf-compact.is-focused { border-color: var(--navy); box-shadow: inset 0 0 0 .5px var(--navy); }
+.nf-row { width: 100%; height: 96px; display: flex; align-items: center; gap: 12px; padding: 11px 14px 11px 11px; }
+.nf-row:hover { border-color: #c9d6e3; }
+.nf-row.is-added { border-color: var(--primary); border-width: 1.5px; padding: 10.5px 13.5px 10.5px 10.5px; }
+.nf-row.is-focused { border-color: var(--navy); border-width: 2px; padding: 10px 13px 10px 10px; }
+.nf-row:focus-visible { outline-offset: 3px; border-radius: 16px; }
+.nf-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.nf-row-name { max-width: 100%; font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text); }
+.nf-row-foot { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.nf-pill { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 9px; border-radius: 999px; background: var(--navy); color: #fff; font-size: 12px; line-height: 14px; white-space: nowrap; animation: nf-pop .2s ease-out; }
 .nf-desktop .nf-chevron { color: var(--navy); }
 .nf-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; animation: nf-fade .2s ease-out; }
-.nf-panel-photo { width: 100%; height: 360px; object-fit: cover; flex: none; }
-.nf-panel-body { flex: 1; min-height: 0; padding: 12px 24px 16px 12px; display: flex; flex-direction: column; gap: 4px; }
-.nf-panel-body .nf-open-desc { line-height: 20px; }
-.nf-panel-foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; }
-.nf-panel .nf-qty { padding: 0; }
+.nf-panel-photo { width: 100%; height: 340px; object-fit: cover; flex: none; }
+.nf-panel-body { flex: 1; min-height: 0; overflow-y: auto; padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 8px; }
+.nf-panel-name { font-size: 24px; font-weight: 600; line-height: 28.8px; color: var(--text); }
+.nf-panel-body .nf-open-desc { line-height: 24px; }
+.nf-panel-foot { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.nf-panel .nf-qty { padding: 0; margin-right: 4px; }
+.nf-panel .nf-qty .nf-round { width: 32px; height: 32px; }
+.nf-btn-add { width: 180px; height: 48px; font-size: 18px; border: 1px solid var(--primary); animation: nf-pop .2s ease-out; }
+.nf-btn-add.is-secondary { background: #fff; color: var(--primary); }
+.nf-btn-add.is-secondary:hover { background: var(--added); filter: none; }
 .nf-desktop .nf-footer { border-radius: 0; padding: 16px 24px; border-top: 1px solid var(--border); box-shadow: none; }
+.nf-dfooter { justify-content: flex-end; gap: 24px; }
+.nf-dfooter .nf-total { align-items: flex-end; text-align: right; }
 .nf-desktop .nf-btn-continue { width: 280px; }
 .nf-dupgrade { flex: 1; min-height: 0; display: flex; }
 .nf-media { position: relative; width: 618px; flex: none; overflow: hidden; }
@@ -462,7 +477,10 @@
 
   // src/prototypes/new-flow/view.tsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-  var FRAME = { mobile: { width: 393, height: 852 }, desktop: { width: 1440, height: 1082 } };
+  var FRAME = {
+    mobile: { width: 393, height: 852, label: "Mobile" },
+    desktop: { width: 1440, height: 1082, label: "Desktop" }
+  };
   function NewFlow(props) {
     const summary = summarize(props.state);
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: `nf nf-${props.device}${props.reducedMotion ? " nf-rm" : ""}`, children: [
@@ -529,24 +547,32 @@
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-dbody", children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-dlist", children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Intro, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("ul", { class: "nf-list", "aria-label": "Add-ons", children: ADDONS.map((a) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(CompactCard, { addon: a, qty: qtyOf(state, a.id), actions, device: "desktop", focused: a.id === state.focus }) }, a.id)) })
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("ul", { class: "nf-list", "aria-label": "Add-ons", children: ADDONS.map((a) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(NavRow, { addon: a, qty: qtyOf(state, a.id), focused: a.id === state.focus, actions }) }, a.id)) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("section", { class: "nf-panel", "aria-label": focus.name, "aria-live": "polite", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { class: "nf-panel-photo", src: PHOTOS[focus.id], alt: "", width: 593, height: 360 }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("section", { class: "nf-panel", "aria-label": focus.name, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { class: "nf-panel-photo", src: PHOTOS[focus.id], alt: "", width: 593, height: 340 }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-panel-body", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { class: "nf-open-name", children: focus.name }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { class: "nf-panel-name", children: focus.name }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { class: "nf-open-desc", children: focus.description }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Tags, { tags: focus.tags }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-panel-foot", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(PriceBlock, { addon: focus }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(QtyControl, { addon: focus, qty: qtyOf(state, focus.id), actions })
+                qtyOf(state, focus.id) ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(QtyControl, { addon: focus, qty: qtyOf(state, focus.id), actions }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+                  "button",
+                  {
+                    class: `nf-btn nf-btn-add${summary.addButton === "secondary" ? " is-secondary" : ""}`,
+                    "aria-label": `Add ${focus.name} to my visit, ${money(focus.price)}${focus.unit ? ` ${focus.unit}` : ""}`,
+                    onClick: () => actions.inc(focus.id),
+                    children: "Add to my visit"
+                  }
+                )
               ] })
             ] })
           ] }, focus.id)
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-footer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-footer nf-dfooter", children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Total, { summary }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { class: "nf-btn nf-btn-continue", onClick: () => actions.step("upgrade"), children: "Continue" })
+          summary.hasAddons ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { class: "nf-btn nf-btn-continue", onClick: () => actions.step("upgrade"), children: "Continue" }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { class: "nf-link", onClick: () => actions.step("upgrade"), children: "Continue without" })
         ] })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-dupgrade", children: [
@@ -655,24 +681,58 @@
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children: "Add these now and pick them up on the day." })
     ] });
   }
+  function NavRow(props) {
+    const a = props.addon;
+    const added = props.qty > 0;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "button",
+      {
+        class: `nf-card nf-row${added ? " is-added" : ""}${props.focused ? " is-focused" : ""}`,
+        "aria-pressed": props.focused,
+        "aria-label": `${a.name}${added ? `, ${props.qty} added` : ""}. Show details`,
+        onClick: () => props.actions.show(a.id),
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { class: "nf-thumb", src: PHOTOS[a.id], alt: "", width: 72, height: 72 }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { class: "nf-row-body", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { class: "nf-row-name nf-ellipsis", children: a.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Tags, { tags: a.tags.slice(0, 1) }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { class: "nf-row-foot", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { class: "nf-inline-price", children: [
+                added ? null : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("s", { children: money(a.boxOffice) }),
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("b", { children: [
+                  money(a.price),
+                  a.unit ? ` ${a.unit}` : ""
+                ] })
+              ] }),
+              added ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { class: "nf-pill", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, {}),
+                props.qty,
+                " added"
+              ] }) : null
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { class: "nf-chevron", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ChevronRight, {}) })
+        ]
+      }
+    );
+  }
   function CompactCard(props) {
     const a = props.addon;
     const added = props.qty > 0;
-    const showWas = !(added && props.device === "mobile");
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: `nf-card nf-compact${added ? " is-added" : ""}${props.focused ? " is-focused" : ""}`, children: [
+    const showWas = !added;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: `nf-card nf-compact${added ? " is-added" : ""}`, children: [
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { class: "nf-thumb", src: PHOTOS[a.id], alt: "", width: 72, height: 72 }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { class: "nf-compact-body", children: [
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
           "button",
           {
             class: "nf-compact-name",
-            "aria-expanded": props.device === "mobile" ? false : void 0,
-            "aria-pressed": props.device === "desktop" ? !!props.focused : void 0,
+            "aria-expanded": false,
             "aria-label": `${a.name}${added ? `, ${props.qty} added` : ""}. Show details`,
             onClick: () => props.actions.show(a.id),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { class: "nf-ellipsis", children: a.name }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { class: "nf-chevron", children: props.device === "mobile" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ChevronDown, {}) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ChevronRight, {}) })
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { class: "nf-chevron", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ChevronDown, {}) })
             ]
           }
         ),
@@ -773,11 +833,11 @@
         upgrade: "16:11132"
       },
       desktop: {
-        first: "82:17918",
-        champagne: "82:18067",
-        "champagne-added": "82:18216",
-        "binoculars-added": "82:18758",
-        photo: "82:18928",
+        first: "123:12192",
+        champagne: "117:3427",
+        "champagne-added": "123:12312",
+        browsing: "117:3780",
+        photo: "117:3962",
         upgrade: "16:9931"
       }
     }
