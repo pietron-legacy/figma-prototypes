@@ -1,5 +1,28 @@
 [
   {
+    "id": "hotel-upsell-s1",
+    "label": "Hotel upsell · Scenario 1 (Enter at Dates & guests)",
+    "sectionIds": [
+      "355:5760"
+    ],
+    "namePattern": "^scenario 1 · enter at dates",
+    "previewNodeId": "357:5745",
+    "canvas": {
+      "iphone-16": {
+        "plan": "357:5745",
+        "upsell": "357:6481",
+        "dates": "357:7183",
+        "hotels": "357:7340",
+        "rooms": "357:7602",
+        "extras": "357:7911",
+        "summary": "357:8225",
+        "checkout": "374:14618",
+        "park-checkout": "374:14990"
+      }
+    },
+    "version": "1794570502645"
+  },
+  {
     "id": "multi-attraction",
     "label": "Multi-attraction selection",
     "sectionIds": [
@@ -19,7 +42,7 @@
         "max": "11:2793"
       }
     },
-    "version": "1793872099697"
+    "version": "1794570502645"
   },
   {
     "id": "new-flow",
@@ -46,7 +69,7 @@
         "upgrade": "16:9931"
       }
     },
-    "version": "1793872099698"
+    "version": "1794570502645"
   },
   {
     "id": "selection",
@@ -75,6 +98,6 @@
         "max": "73:55662"
       }
     },
-    "version": "1793872099698"
+    "version": "1794570502645"
   }
 ]
